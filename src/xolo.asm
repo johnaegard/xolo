@@ -59,7 +59,7 @@ start:
    ; load bins to VRAM
    VRAM_LOAD_FILE vertical_filename, VERT_FILENAME_LENGTH, VRAM_vert_sprite_base
    ; light up the sprite
-   VERA_SET_ADDR VRAM_sprattr+8, 1
+   VERA_SET_ADDR VRAM_sprattr, 1
 
    ; set sprite frame address
    lda #<(VRAM_vert_sprite_base >> 5)
@@ -113,7 +113,7 @@ start:
    lda #VERA_mode
    sta VERA_dc_video
    endless:
-   jmp (endless)
+   jmp endless
 
    ; backup default RAM IRQ vector
 ;    lda IRQVec
