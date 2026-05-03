@@ -9,7 +9,17 @@
 #define TANK_X            120
 #define TANK_Y            120
 
+// World position: viewport = (tank_world_x - 120, tank_world_y - 120).
+// Initialised to maze centre so the viewport starts at the same position
+// as the old MAZE_INIT_PX/PY (2280 = 2400 - 120).
+unsigned int tank_world_x = 2400;
+unsigned int tank_world_y = 2400;
+
 static unsigned char tank_angle = 0;
+
+// dx/dy per sprite frame (tank_angle >> 5), clockwise from up.
+static const signed char move_dx[8] = { 0, 1, 1, 1, 0,-1,-1,-1};
+static const signed char move_dy[8] = {-1,-1, 0, 1, 1, 1, 0,-1};
 
 // Update sprite attribute bytes 0-1 (VRAM address) for the current rotation.
 // Bytes 2-7 (position, z, size) are set once in tank_init and don't change.
@@ -39,6 +49,12 @@ void tank_init(void) {
   VERA.data0 = (unsigned char)(TANK_Y >> 8);
   VERA.data0 = SPRITE_BYTE6_Z_ABOVE_BACKGROUND;
   VERA.data0 = SPRITE_BYTE7_HEIGHT_8 | SPRITE_BYTE7_WIDTH_8;
+}
+
+void tank_move_forward(void) {
+  unsigned char frame = tank_angle >> 5;
+  tank_world_x = (unsigned int)((int)tank_world_x + (int)move_dx[frame]);
+  tank_world_y = (unsigned int)((int)tank_world_y + (int)move_dy[frame]);
 }
 
 void tank_rotate_cw(void) {

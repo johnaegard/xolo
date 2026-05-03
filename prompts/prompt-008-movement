@@ -1,0 +1,4 @@
+make the tank sprite move forward when the joystick is up
+stop the tank sprite when the joystick is not up
+the tank sprite is always rendered in the middle of the screen
+the maze moves around it

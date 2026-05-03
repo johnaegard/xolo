@@ -7,12 +7,12 @@
 #include "tank.h"
 #include "wait.h"
 
+#define MAX_PX ((MAZE_COLS - VIEW_COLS) * CELL_PX)
 #define MAX_PY ((MAZE_ROWS - VIEW_ROWS) * CELL_PX)
 
 int main(void) {
-  unsigned int px = MAZE_INIT_PX;
-  unsigned int py = MAZE_INIT_PY;
-  unsigned char joy, redraw;
+  unsigned int px, py;
+  unsigned char joy;
 
   VERA.display.hscale = DC_HSCALE_320;
   VERA.display.vscale = DC_VSCALE_240;
@@ -23,6 +23,9 @@ int main(void) {
   maze_init_sprites();
   overlay_init();
   tank_init();
+
+  px = tank_world_x - 120;
+  py = tank_world_y - 120;
   maze_draw_px(px, py);
 
   joy_install(cx16_std_joy);
@@ -30,14 +33,17 @@ int main(void) {
   while (1) {
     wait();
     joy = joy_read(0);
-    redraw = 0;
 
-    if ((joy & JOY_UP_MASK)   && py > 0)     { py--; redraw = 1; }
-    if ((joy & JOY_DOWN_MASK) && py < MAX_PY) { py++; redraw = 1; }
-    if (joy & JOY_LEFT_MASK)  { tank_rotate_ccw(); }
-    if (joy & JOY_RIGHT_MASK) { tank_rotate_cw(); }
-
-    if (redraw) maze_draw_px(px, py);
+    if (joy & JOY_LEFT_MASK)  tank_rotate_ccw();
+    if (joy & JOY_RIGHT_MASK) tank_rotate_cw();
+    if (joy & JOY_UP_MASK) {
+      tank_move_forward();
+      px = tank_world_x - 120;
+      py = tank_world_y - 120;
+      if (px > MAX_PX) px = MAX_PX;
+      if (py > MAX_PY) py = MAX_PY;
+      maze_draw_px(px, py);
+    }
   }
 
   return 0;
