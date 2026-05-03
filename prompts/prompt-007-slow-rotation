@@ -1,0 +1,4 @@
+track the current rotation of the tank in an unsigned char called tank_angle
+when the joystick is left, subtract 1 from tank_angle
+when the joystick is right, add 1 to that tank_angle
+to determine the sprite rotation to display, right-shift the tank_angle by 5 bits
