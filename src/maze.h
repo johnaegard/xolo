@@ -3,13 +3,13 @@
 
 #define MAZE_ROWS  100
 #define MAZE_COLS  100
-#define CELL_PX    32
-#define VIEW_COLS  8
-#define VIEW_ROWS  8
+#define CELL_PX    48
+#define VIEW_COLS  5
+#define VIEW_ROWS  5
 
 // Pixel offset that centers the viewport on the map.
-#define MAZE_INIT_PX  (((MAZE_COLS - VIEW_COLS) * CELL_PX) / 2)   /* 1472 */
-#define MAZE_INIT_PY  (((MAZE_ROWS - VIEW_ROWS) * CELL_PX) / 2)   /* 1488 */
+#define MAZE_INIT_PX  (((MAZE_COLS - VIEW_COLS) * CELL_PX) / 2)   /* 2280 */
+#define MAZE_INIT_PY  (((MAZE_ROWS - VIEW_ROWS) * CELL_PX) / 2)   /* 2280 */
 
 // Cell values: 0=no walls, 1=top wall, 2=left wall, 3=top+left walls
 extern unsigned char maze[MAZE_ROWS][MAZE_COLS];

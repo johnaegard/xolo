@@ -5,11 +5,11 @@
 
 unsigned char maze[MAZE_ROWS][MAZE_COLS];
 
-// Sprite pixel data in VRAM (32x32, 4bpp = 512 bytes each):
+// Sprite pixel data in VRAM (64x64, 4bpp = 2048 bytes each):
 //   Shape 1 (top wall)  : 0x00000  -> addr byte0 = (0x00000 >> 5) = 0x00
-//   Shape 2 (left wall) : 0x00200  -> addr byte0 = (0x00200 >> 5) = 0x10
-//   Shape 3 (top+left)  : 0x00400  -> addr byte0 = (0x00400 >> 5) = 0x20
-static const unsigned char shape_addr_byte0[4] = {0x00, 0x00, 0x10, 0x20};
+//   Shape 2 (left wall) : 0x00800  -> addr byte0 = (0x00800 >> 5) = 0x40
+//   Shape 3 (top+left)  : 0x01000  -> addr byte0 = (0x01000 >> 5) = 0x80
+static const unsigned char shape_addr_byte0[4] = {0x00, 0x00, 0x40, 0x80};
 
 // Assign maze cells randomly: 10% each for values 1, 2, 3; 70% value 0.
 void maze_randomize(void) {
@@ -22,33 +22,41 @@ void maze_randomize(void) {
   }
 }
 
-// Write 32x32 4bpp pixel data for all three wall shapes.
+// Write 64x64 4bpp pixel data for all three wall shapes (32 bytes/row).
+// Walls are drawn only in the top-left 48x48 area matching CELL_PX; the
+// remaining 16px fringe is transparent so adjacent sprites don't bleed.
 // Color 6 (0x6) = blue; color 0 = transparent.
 // Clears all 128 sprite attribute entries.
 void maze_init_sprites(void) {
   unsigned char row, col;
   unsigned int i;
 
-  // Shape 1: top row blue, remaining rows transparent (32 rows x 16 bytes)
+  // Shape 1: top row blue across 48px (24 bytes 0x66 + 8 bytes 0x00), rest transparent
   vera_set_addr(0x00000UL);
-  for (col = 0; col < 16; col++) VERA.data0 = 0x66;
-  for (row = 1; row < 32; row++)
-    for (col = 0; col < 16; col++) VERA.data0 = 0x00;
+  for (col = 0; col < 24; col++) VERA.data0 = 0x66;
+  for (col = 0; col < 8;  col++) VERA.data0 = 0x00;
+  for (row = 1; row < 64; row++)
+    for (col = 0; col < 32; col++) VERA.data0 = 0x00;
 
-  // Shape 2: leftmost pixel blue per row (high nibble=6, low=0), rest transparent
-  vera_set_addr(0x00200UL);
-  for (row = 0; row < 32; row++) {
+  // Shape 2: left pixel blue for rows 0-47, rest transparent
+  vera_set_addr(0x00800UL);
+  for (row = 0; row < 48; row++) {
     VERA.data0 = 0x60;
-    for (col = 1; col < 16; col++) VERA.data0 = 0x00;
+    for (col = 1; col < 32; col++) VERA.data0 = 0x00;
   }
+  for (row = 48; row < 64; row++)
+    for (col = 0; col < 32; col++) VERA.data0 = 0x00;
 
-  // Shape 3: top row blue, left pixel blue for remaining rows
-  vera_set_addr(0x00400UL);
-  for (col = 0; col < 16; col++) VERA.data0 = 0x66;
-  for (row = 1; row < 32; row++) {
+  // Shape 3: top row blue across 48px, left pixel blue for rows 1-47, rest transparent
+  vera_set_addr(0x01000UL);
+  for (col = 0; col < 24; col++) VERA.data0 = 0x66;
+  for (col = 0; col < 8;  col++) VERA.data0 = 0x00;
+  for (row = 1; row < 48; row++) {
     VERA.data0 = 0x60;
-    for (col = 1; col < 16; col++) VERA.data0 = 0x00;
+    for (col = 1; col < 32; col++) VERA.data0 = 0x00;
   }
+  for (row = 48; row < 64; row++)
+    for (col = 0; col < 32; col++) VERA.data0 = 0x00;
 
   // Clear all 128 sprite attribute entries
   vera_set_addr(0x1FC00UL);
@@ -99,7 +107,7 @@ void maze_draw_px(unsigned int px, unsigned int py) {
         VERA.data0 = (unsigned char)(enc_sy & 0xFF);
         VERA.data0 = (unsigned char)(enc_sy >> 8);
         VERA.data0 = SPRITE_BYTE6_Z_ABOVE_BACKGROUND;
-        VERA.data0 = SPRITE_BYTE7_HEIGHT_32 | SPRITE_BYTE7_WIDTH_32;
+        VERA.data0 = SPRITE_BYTE7_HEIGHT_64 | SPRITE_BYTE7_WIDTH_64;
       }
     }
   }

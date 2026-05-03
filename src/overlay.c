@@ -3,9 +3,9 @@
 #include "overlay.h"
 
 // Layer 0 map: 64 tiles wide x 32 tall (minimum to cover 40x30 screen at 8px).
-// Map lives at 0x00600, immediately after the three 512-byte sprite pixel blobs.
+// Map lives at 0x01800, immediately after the three 2048-byte 64x64 sprite blobs.
 // Charset (standard PETSCII, loaded by KERNAL at boot) lives at 0x1F000.
-#define MAP_VRAM    0x00600UL
+#define MAP_VRAM    0x01800UL
 #define TILE_VRAM   0x1F000UL
 #define MAP_STRIDE  64
 #define SCREEN_ROWS 30
