@@ -1,0 +1,4 @@
+create an 8x8 4bpp sprite bitmap of an white equilateral triangle with point facing up
+write this to the file assets/tank0.bin
+create 7 rotations of 45 degrees each, writing the result to tank1.bin thru tank7.bin 
+in the program, load this file into vram and configure a sprite to show it at 120,120
