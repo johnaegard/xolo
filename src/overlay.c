@@ -18,6 +18,23 @@
 #define CHAR_X       0x18
 #define COLOR_TRANS  0x00  // palette 0 = transparent for both fg and bg
 #define COLOR_PANEL  0x61  // bg=6 (blue), fg=1 (white)
+#define COLOR_DEBUG  0x51  // bg=5 (green), fg=1 (white)
+
+// Write a label char, ':', and 4 decimal digits into the sidebar at (row, col 30).
+static void write_coord(unsigned char row, unsigned char label, unsigned int val) {
+  vera_set_addr(MAP_VRAM + (unsigned long)(row * MAP_STRIDE + PLAY_COLS) * 2);
+  VERA.data0 = label; VERA.data0 = COLOR_DEBUG;
+  VERA.data0 = 0x3A;  VERA.data0 = COLOR_DEBUG;  // ':'
+  VERA.data0 = 0x30 + (unsigned char)((val / 1000) % 10); VERA.data0 = COLOR_DEBUG;
+  VERA.data0 = 0x30 + (unsigned char)((val / 100)  % 10); VERA.data0 = COLOR_DEBUG;
+  VERA.data0 = 0x30 + (unsigned char)((val / 10)   % 10); VERA.data0 = COLOR_DEBUG;
+  VERA.data0 = 0x30 + (unsigned char)(val           % 10); VERA.data0 = COLOR_DEBUG;
+}
+
+void overlay_draw_coords(unsigned int x, unsigned int y) {
+  write_coord(1, 0x18, x);  // 'X'
+  write_coord(2, 0x19, y);  // 'Y'
+}
 
 void overlay_init(void) {
   unsigned char row, col;

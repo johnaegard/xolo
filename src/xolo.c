@@ -27,6 +27,7 @@ int main(void) {
   px = tank_world_x - 120;
   py = tank_world_y - 120;
   maze_draw_px(px, py);
+  overlay_draw_coords(tank_world_x, tank_world_y);
 
   joy_install(cx16_std_joy);
 
@@ -43,6 +44,7 @@ int main(void) {
       if (px > MAX_PX) px = MAX_PX;
       if (py > MAX_PY) py = MAX_PY;
       maze_draw_px(px, py);
+      overlay_draw_coords(tank_world_x, tank_world_y);
     }
   }
 
