@@ -7,7 +7,6 @@
 #include "tank.h"
 #include "wait.h"
 
-#define MAX_PX ((MAZE_COLS - VIEW_COLS) * CELL_PX)
 #define MAX_PY ((MAZE_ROWS - VIEW_ROWS) * CELL_PX)
 
 int main(void) {
@@ -33,10 +32,10 @@ int main(void) {
     joy = joy_read(0);
     redraw = 0;
 
-    if ((joy & JOY_UP_MASK)    && py > 0)      { py--; redraw = 1; }
-    if ((joy & JOY_DOWN_MASK)  && py < MAX_PY)  { py++; redraw = 1; }
-    if ((joy & JOY_LEFT_MASK)  && px > 0)       { px--; redraw = 1; }
-    if ((joy & JOY_RIGHT_MASK) && px < MAX_PX)  { px++; redraw = 1; }
+    if ((joy & JOY_UP_MASK)   && py > 0)     { py--; redraw = 1; }
+    if ((joy & JOY_DOWN_MASK) && py < MAX_PY) { py++; redraw = 1; }
+    if (joy & JOY_LEFT_MASK)  { tank_rotate_ccw(); }
+    if (joy & JOY_RIGHT_MASK) { tank_rotate_cw(); }
 
     if (redraw) maze_draw_px(px, py);
   }

@@ -1,0 +1,4 @@
+create 7 rotations of the tank sprite
+save them in assets/tank(x).bin 
+where x goes from 1 to 7
+and the rotation is x * 45

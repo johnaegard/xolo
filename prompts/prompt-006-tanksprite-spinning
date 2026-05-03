@@ -1,0 +1,3 @@
+load all the rotations of the tank sprite into vram
+when the joystick is left, rotate the tank sprite counter-clockwise
+when the joystick is right, rotate the tank sprite clockwise
