@@ -3,6 +3,7 @@
 #include <joystick.h>
 #include "vera-util.h"
 #include "maze.h"
+#include "overlay.h"
 #include "wait.h"
 
 #define MAX_PX ((MAZE_COLS - VIEW_COLS) * CELL_PX)
@@ -20,6 +21,7 @@ int main(void) {
   srand(42);
   maze_randomize();
   maze_init_sprites();
+  overlay_init();
   maze_draw_px(px, py);
 
   joy_install(cx16_std_joy);

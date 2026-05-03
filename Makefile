@@ -1,7 +1,7 @@
 CC=cl65
 X16=~/src/x16/x16emu/x16emu -run -scale 2
 
-OBJS = build/xolo.o build/maze.o build/wait.o build/vera-util.o
+OBJS = build/xolo.o build/maze.o build/wait.o build/vera-util.o build/overlay.o
 
 xolo: $(OBJS)
 	$(CC) -o build/xolo.prg -t cx16 $(OBJS)

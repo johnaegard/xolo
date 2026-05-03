@@ -1,0 +1,4 @@
+tile layer 0 is an overlay that masks the playfield.
+tile layer 0 should reveal the 240x240 playfield and block out the rightmost 80 pixels of the screen
+tile layer 0 is in character mode, using the standard petscii character set
+use the petsci character X for the non transparent parts of the overlay 

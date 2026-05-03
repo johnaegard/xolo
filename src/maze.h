@@ -5,7 +5,7 @@
 #define MAZE_COLS  100
 #define CELL_PX    32
 #define VIEW_COLS  8
-#define VIEW_ROWS  7
+#define VIEW_ROWS  8
 
 // Pixel offset that centers the viewport on the map.
 #define MAZE_INIT_PX  (((MAZE_COLS - VIEW_COLS) * CELL_PX) / 2)   /* 1472 */
