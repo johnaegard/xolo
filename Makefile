@@ -1,8 +1,13 @@
 CC=cl65
 X16=~/src/x16/x16emu/x16emu -run -scale 2
 
-xolo:
-	$(CC) -O -o build/xolo.prg -t cx16  src/xolo.c src/maze.c src/wait.c src/vera-util.c
+OBJS = build/xolo.o build/maze.o build/wait.o build/vera-util.o
+
+xolo: $(OBJS)
+	$(CC) -o build/xolo.prg -t cx16 $(OBJS)
+
+build/%.o: src/%.c
+	$(CC) -O -c -o $@ -t cx16 $<
 
 distrib-xolo: xolo
 	mkdir -p distrib && \
@@ -12,4 +17,4 @@ run-xolo: distrib-xolo
 	cd distrib && $(X16) -debug -prg xolo.prg && cd -
 
 clean:
-	rm -f *.prg build/*.prg *.lbl build/*.lbl build/*.o distrib/*
+	rm -f *.prg build/*.prg *.lbl build/*.lbl build/*.o src/*.o distrib/*
