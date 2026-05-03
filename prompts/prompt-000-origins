@@ -1,0 +1,33 @@
+Initialize the vera display to 320x240.
+
+Tile layer 0 is active.  
+Tile layer 1 is hidden
+Sprites are active and are 32x32 pixels
+Sprites appear underneath tile layer 0
+All sprites have 4bpp
+
+Create a 100x100 two-dimensional byte array to represent the maze.
+Each byte in the array will represent a cell in the maze.
+Each byte in this array will have a value of 0, 1, 2, or 3.
+A value of 0 means the cell has no walls.
+A value of 1 means the cell has a top wall.
+A value of 2 means the cell has a left wall.
+A value of 3 means the cell has both a top and a left wall.
+Randomly assign the contents of the maze as follows
+* 10% of the cells will have the value 1
+* 10% of the cells will have the value 2
+* 10% of the cells will have the value 3
+All other cells will have the value 0.
+
+Each cell in the maze will be 32x32 pixels in size.
+Create three sprite shapes to correspond to the 1,2,3 values in the map array.
+The first should have the top row of pixels set to blue
+The second should have the leftmost column of pixels set to blue
+The third should have both the top row and leftmost column of pixels set to blue.
+
+Use these sprites to draw the map on the screen.
+The user should see the exact middle of the map, pixel-wise
+Display 8 columns and 7 rows of the maze
+
+In the game's main loop, poll the joystick and move the viewport up, down, left, or right accordingly
+
