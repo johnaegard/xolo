@@ -5,6 +5,7 @@
 #include "maze.h"
 #include "overlay.h"
 #include "tank.h"
+#include "enemy.h"
 #include "wait.h"
 
 #define MAX_PX ((MAZE_COLS - VIEW_COLS) * CELL_PX)
@@ -23,6 +24,7 @@ int main(void) {
   maze_init_sprites();
   overlay_init();
   tank_init();
+  enemy_init();
 
   px = tank_world_x - 120;
   py = tank_world_y - 120;
@@ -35,6 +37,7 @@ int main(void) {
     wait();
     joy = joy_read(0);
 
+    enemy_update();
     if (joy & JOY_LEFT_MASK)  tank_rotate_ccw();
     if (joy & JOY_RIGHT_MASK) tank_rotate_cw();
     if (joy & JOY_UP_MASK) {
