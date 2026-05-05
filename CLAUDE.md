@@ -9,10 +9,10 @@ A Commander X16 maze tank game written in C, compiled with the cc65 toolchain (`
 ## Build & Run
 
 ```sh
-make xolo          # compile to build/xolo.prg
-make distrib-xolo  # build and copy assets to distrib/
-make run-xolo      # build, package, and launch in the X16 emulator
-make clean         # remove build artifacts
+make           # compile to build/xolo.prg
+make distrib   # build and copy assets to distrib/
+make run       # build, package, and launch in the X16 emulator
+make clean     # remove build artifacts
 ```
 
 The compiler is `cl65` (cc65 suite). When adding new `.c` source files, update the `xolo` recipe in `Makefile` to include them.
@@ -34,3 +34,5 @@ Use the wait() function in src/wait.c for vsync wait functionality.
 
 Assets (`.bin` files) live in `assets/` and are loaded at runtime into VRAM — they are not linked into the `.prg`. The `distrib/` directory is the run directory for the emulator; it must contain both `xolo.prg` and the asset binaries.
 
+After changes, output the vera memory map to docs/vera-memory-map.md
+Show the total VRAM used and the total remaining

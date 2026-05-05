@@ -1,0 +1,3 @@
+load enemya*.bin into vram
+create a sprite with the first rotation, place it at 150,50
+every 15 frames advance the rotation by one

@@ -133,6 +133,14 @@
 #define DC_HSCALE_320 64
 #define DC_VSCALE_240 64
 
+// Sprite collision mask bits (bits 7:4 of attribute byte 6).
+// Two sprites collide when they share a bit and paint overlapping non-transparent pixels.
+// The matching bit(s) are OR'd into VERA.irq_flags bits 7:4 (read/clear after vsync).
+#define SPRITE_BYTE6_COLLMASK_0 0b00010000
+#define SPRITE_BYTE6_COLLMASK_1 0b00100000
+#define SPRITE_BYTE6_COLLMASK_2 0b01000000
+#define SPRITE_BYTE6_COLLMASK_3 0b10000000
+
 // HEADER OPTIONS
 #define SKIP_2_BYTE_HEADER 0
 #define USE_2_BYTE_HEADER 1

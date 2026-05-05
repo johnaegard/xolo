@@ -8,5 +8,6 @@ void tank_init(void);
 void tank_rotate_cw(void);
 void tank_rotate_ccw(void);
 void tank_move_forward(void);
+void tank_destroy(void);
 
 #endif  // TANK_H

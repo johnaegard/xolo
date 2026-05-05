@@ -36,6 +36,16 @@ void overlay_draw_coords(unsigned int x, unsigned int y) {
   write_coord(2, 0x19, y);  // 'Y'
 }
 
+void overlay_draw_collision(unsigned char coll_nibble) {
+  vera_set_addr(MAP_VRAM + (unsigned long)(3 * MAP_STRIDE + PLAY_COLS) * 2);
+  VERA.data0 = 0x03; VERA.data0 = COLOR_DEBUG;  // 'C'
+  VERA.data0 = 0x3A; VERA.data0 = COLOR_DEBUG;  // ':'
+  VERA.data0 = 0x30 + ((coll_nibble >> 3) & 1); VERA.data0 = COLOR_DEBUG;  // bit 3
+  VERA.data0 = 0x30 + ((coll_nibble >> 2) & 1); VERA.data0 = COLOR_DEBUG;  // bit 2
+  VERA.data0 = 0x30 + ((coll_nibble >> 1) & 1); VERA.data0 = COLOR_DEBUG;  // bit 1
+  VERA.data0 = 0x30 + ((coll_nibble     ) & 1); VERA.data0 = COLOR_DEBUG;  // bit 0
+}
+
 void overlay_init(void) {
   unsigned char row, col;
 
@@ -49,7 +59,7 @@ void overlay_init(void) {
   for (row = 0; row < SCREEN_ROWS; row++) {
     for (col = 0; col < MAP_STRIDE; col++) {
       if (col >= PLAY_COLS && col < TOTAL_COLS) {
-        VERA.data0 = CHAR_X;
+        VERA.data0 = CHAR_SPACE;
         VERA.data0 = COLOR_PANEL;
       } else {
         VERA.data0 = CHAR_SPACE;

@@ -1,0 +1,20 @@
+make an 16x16 4bpp enemy sprite 
+
+the bitmap is below, with O=orange, Y=yellow
+center the bitmap in the 16x16 sprite
+
+(Bitmap data begins)
+     O
+    OOO
+   OOYOO  
+   OOYOO 
+   OYYYO 
+   OOYOO 
+   OOOOO
+   O O O
+   O   O      
+(Bitmap data ends)
+
+save this rotation of the sprite to assets/enemya0.bin
+create 15 additional rotations of the sprite, each rotated clockwise by 22.5 degrees
+save these rotations to assets/enemya(rotation index).bin

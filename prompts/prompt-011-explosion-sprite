@@ -1,0 +1,6 @@
+make an 16x16 4bpp explosion sprite 
+the explosion should have 16 frames, each saved in the files explosion(frame).bin
+and be colored white, yellow, orange and red
+load the explosion sprite frames into vram 
+create an explosion sprite with the first frame, place it at 50,50
+every 2 game frames advance the explosion frame by one
