@@ -8,7 +8,7 @@
 // Maze uses slots 0-35, tank uses 36.
 #define ENEMY_SPRITE_INDEX 37
 #define ENEMY_X            150
-#define ENEMY_Y            50
+#define ENEMY_Y            120
 
 static unsigned char enemy_rot   = 0;
 static unsigned char frame_count = 0;
@@ -39,7 +39,7 @@ void enemy_init(void) {
   VERA.data0 = (unsigned char)(ENEMY_X >> 8);
   VERA.data0 = (unsigned char)(ENEMY_Y & 0xFF);
   VERA.data0 = (unsigned char)(ENEMY_Y >> 8);
-  VERA.data0 = SPRITE_BYTE6_Z_ABOVE_BACKGROUND;
+  VERA.data0 = SPRITE_BYTE6_Z_DISABLED;
   VERA.data0 = SPRITE_BYTE7_HEIGHT_16 | SPRITE_BYTE7_WIDTH_16;
 }
 

@@ -6,7 +6,7 @@ OBJS = build/xolo.o build/maze.o build/wait.o build/vera-util.o build/overlay.o 
 xolo: $(OBJS)
 	$(CC) -o build/xolo.prg -t cx16 $(OBJS)
 
-build/%.o: src/%.c
+build/%.o: src/c/%.c
 	$(CC) -O -c -o $@ -t cx16 $<
 
 distrib: xolo
@@ -16,6 +16,15 @@ distrib: xolo
 
 run: distrib
 	cd distrib && $(X16) -debug -prg xolo.prg && cd -
+
+LAYER_DEMO_OBJS = build/layer-demo.o build/vera-util.o
+
+layer-demo: $(LAYER_DEMO_OBJS)
+	$(CC) -o build/layer-demo.prg -t cx16 $(LAYER_DEMO_OBJS)
+
+run-layer-demo: layer-demo
+	mkdir -p distrib && cp build/layer-demo.prg distrib && \
+	cd distrib && $(X16) -debug -prg layer-demo.prg && cd -
 
 clean:
 	rm -f *.prg build/*.prg *.lbl build/*.lbl build/*.o src/*.o distrib/*

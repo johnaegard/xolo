@@ -1,4 +1,6 @@
+remove previous colission detection code
 if the tank touches a wall, it explodes
-implement using vera sprite collision  detectiom
+implement using vera sprite collision detectiom as described in ../cx16CodingInC/Chapter17-Collisions/
+set up an interrupt handler that will clear the SPRCOL bit on the ISR register
 when the player tank collides with a wall, trigger an explosion animation and remove the tank from the game
 output the contents of the sprite collision bites in the overlay for debugging purposes

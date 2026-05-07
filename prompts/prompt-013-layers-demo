@@ -1,0 +1,5 @@
+create a new source file called layer-demo.c
+add makefile entriews to compile it to layer-demo.prg and to run it 
+use vera-utils.h
+it should set up vera so that sprites and layers are inactive, output is to vga
+the border should be cyan (palette index 3) and the background color 12

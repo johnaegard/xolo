@@ -98,7 +98,7 @@ void maze_draw_px(unsigned int px, unsigned int py) {
         VERA.data0 = (unsigned char)(enc_sy & 0xFF);
         VERA.data0 = (unsigned char)(enc_sy >> 8);
         VERA.data0 = SPRITE_BYTE6_Z_DISABLED;
-        VERA.data0 = 0x00;
+        VERA.data0 = SPRITE_BYTE7_HEIGHT_64 | SPRITE_BYTE7_WIDTH_64;
       } else {
         VERA.data0 = shape_addr_byte0[val];
         VERA.data0 = SPRITE_BYTE1_4BPP;
