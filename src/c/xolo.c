@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <joystick.h>
 #include <6502.h>
+#include <stdbool.h>
 #include "vera-util.h"
 #include "maze.h"
 #include "overlay.h"
@@ -18,10 +19,12 @@
 // for the main loop to read. Returning IRQ_HANDLED suppresses further handling.
 #define IRQ_STACK_SIZE 8
 static unsigned char irqStack[IRQ_STACK_SIZE];
+static bool collision_occurred = false;
 
 static unsigned char irqHandler(void) {
   if (VERA.irq_flags & 0x04) {
     VERA.irq_flags = 0x04;  // clear SPRCOL
+    collision_occurred = true;
     return IRQ_HANDLED;
   }
   return IRQ_NOT_HANDLED;
@@ -60,18 +63,15 @@ int main(void) {
     wait();
     joy = joy_read(0);
 
-    // ISR bits 7:4 are set by VERA when sprites sharing a COLLMASK bit overlap.
-    // Tank and walls both carry COLLMASK_0, so ISR bit 4 = tank hit a wall.
-    // Enemy has no mask → never fires this bit.
     {
       unsigned char coll = VERA.irq_flags & 0xF0;
-      if (!game_over && (coll & 0x10)) {
+      if (!game_over && collision_occurred) {
         overlay_draw_collision(coll >> 4);
         game_over = 1;
         tank_destroy();
         explosion_trigger(116, 116);
       }
-      VERA.irq_flags = 0xF0;  // clear collision-group bits for next frame
+      VERA.irq_flags &= 0x0F;  // clear collision-group bits for next frame
     }
 
     enemy_update();

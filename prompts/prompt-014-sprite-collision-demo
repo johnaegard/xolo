@@ -1,0 +1,12 @@
+create a new source file called sprcol-demo.c
+add makefile entriews to compile it to sprcol-demo.prg and to run it 
+use vera-utils.h
+it should set up vera so that sprites are active and sprite collision interrupts are enabled
+create two sprites 
+sprite 1 is an 32x32 white square with the bottom right quarter transparent, at position (100, 100)
+sprite 2 is an 32x32 red square with the top left quarter transparent, at position (150, 150)
+both sprites have collision mask 1001
+set up an interrupt handler for sprite collision 
+the interrupt handler will print the message "interrupt handled" and set a global bool variable collision to true
+in the main loop, each time any key is pressed, move sprite 1 by (1,1) and check if collision is true
+if collision is true, print the sprite collision bits from VERA.irq_flags

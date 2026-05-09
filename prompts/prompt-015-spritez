@@ -1,0 +1,4 @@
+in xolo move sprites to above layer 0
+move the overlay to layer 1
+activate layer 0 with 64x32 4bpp 8x8 tiles
+fill layer 0 with a checkerboard of cyan and gray tiles
