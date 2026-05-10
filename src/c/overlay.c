@@ -36,14 +36,14 @@ void overlay_draw_coords(unsigned int x, unsigned int y) {
   write_coord(2, 0x19, y);  // 'Y'
 }
 
-void overlay_draw_collision(unsigned char coll_nibble) {
+void overlay_draw_collision(unsigned char coll_nibble, unsigned char color) {
   vera_set_addr(MAP_VRAM + (unsigned long)(3 * MAP_STRIDE + PLAY_COLS) * 2);
-  VERA.data0 = 0x03; VERA.data0 = COLOR_DEBUG;  // 'C'
-  VERA.data0 = 0x3A; VERA.data0 = COLOR_DEBUG;  // ':'
-  VERA.data0 = 0x30 + ((coll_nibble >> 3) & 1); VERA.data0 = COLOR_DEBUG;  // bit 3
-  VERA.data0 = 0x30 + ((coll_nibble >> 2) & 1); VERA.data0 = COLOR_DEBUG;  // bit 2
-  VERA.data0 = 0x30 + ((coll_nibble >> 1) & 1); VERA.data0 = COLOR_DEBUG;  // bit 1
-  VERA.data0 = 0x30 + ((coll_nibble     ) & 1); VERA.data0 = COLOR_DEBUG;  // bit 0
+  VERA.data0 = 0x03; VERA.data0 = color;  // 'C'
+  VERA.data0 = 0x3A; VERA.data0 = color;  // ':'
+  VERA.data0 = 0x30 + ((coll_nibble >> 3) & 1); VERA.data0 = color;  // bit 3
+  VERA.data0 = 0x30 + ((coll_nibble >> 2) & 1); VERA.data0 = color;  // bit 2
+  VERA.data0 = 0x30 + ((coll_nibble >> 1) & 1); VERA.data0 = color;  // bit 1
+  VERA.data0 = 0x30 + ((coll_nibble     ) & 1); VERA.data0 = color;  // bit 0
 }
 
 void overlay_init(void) {

@@ -31,14 +31,13 @@ void maze_randomize(void) {
 void maze_init_sprites(void) {
   unsigned char row, col;
   unsigned int i;
-  unsigned char height = 46;
+  unsigned char height = 48;
   unsigned char color2bit =0x11;
   unsigned char color1bit =0x10;
 
-  // Shape 1: top row blue across 48px (24 bytes 0x66 + 8 bytes 0x00), rest transparent
+  // Shape 1: top row  across 48px (24 bytes 0x66 + 8 bytes 0x00), rest transparent
   vera_set_addr(0x00000UL);
-  for (col = 0; col < 23; col++) VERA.data0 = color2bit;
-  VERA.data0 = 0x00;
+  for (col = 0; col < 24; col++) VERA.data0 = color2bit;
   for (col = 0; col < 8;  col++) VERA.data0 = 0x00;
   for (row = 1; row < 64; row++)
     for (col = 0; col < 32; col++) VERA.data0 = 0x00;
@@ -54,8 +53,7 @@ void maze_init_sprites(void) {
 
   // Shape 3: top row blue across 48px, left pixel blue for rows 1-47, rest transparent
   vera_set_addr(0x01000UL);
-  for (col = 0; col < 23; col++) VERA.data0 = color2bit;
-  VERA.data0 = 0x00;
+  for (col = 0; col < 24; col++) VERA.data0 = color2bit;
   for (col = 0; col < 8;  col++) VERA.data0 = 0x00;
   for (row = 1; row < height; row++) {
     VERA.data0 = color1bit;

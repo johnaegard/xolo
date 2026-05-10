@@ -75,13 +75,32 @@ int main(void) {
       {
         if (collision_occurred) {
           unsigned char coll = VERA.irq_flags & 0xF0;
-          if ((coll & 0b10000000) || (coll & 0b01000000)) {  // collision with enemy sprite (group 3) or maze sprite (group 2)
-            overlay_draw_collision(coll >> 4);
-            game_over = 1;
-            tank_destroy();
-            explosion_trigger(116, 116);
+          overlay_draw_collision(coll >> 4, COLOR_COLLISION_HIT);
+          if ((coll & 0b10000000) || (coll & 0b01000000)) {
+            unsigned char sub_x   = (unsigned char)((tank_world_x + 4) % CELL_PX);
+            unsigned char sub_y   = (unsigned char)((tank_world_y + 4) % CELL_PX);
+            unsigned char cell_col = (unsigned char)((tank_world_x +4) / CELL_PX);
+            unsigned char cell_row = (unsigned char)((tank_world_y +4) / CELL_PX);
+            unsigned char near_wall = 0;
+            // left edge of current cell → check current cell's left wall
+            if (sub_x <= 3 && (maze[cell_row][cell_col] & 2)) near_wall = 1;
+            // right edge of current cell → check left wall of next column
+            if (sub_x >= CELL_PX - 3 && cell_col + 1 < MAZE_COLS
+                && (maze[cell_row][cell_col + 1] & 2)) near_wall = 1;
+            // top edge of current cell → check current cell's top wall
+            if (sub_y <= 4 && (maze[cell_row][cell_col] & 1)) near_wall = 1;
+            // bottom edge of current cell → check top wall of next row
+            if (sub_y >= CELL_PX - 3 && cell_row + 1 < MAZE_ROWS
+                && (maze[cell_row + 1][cell_col] & 1)) near_wall = 1;
+            if (near_wall) {
+              game_over = 1;
+              tank_destroy();
+              explosion_trigger(116, 116);
+            }
           }
           collision_occurred = false;
+        } else {
+          overlay_draw_collision(0, COLOR_COLLISION_IDLE);
         }
         VERA.irq_flags &= 0x0F;  // clear collision-group bits for next frame
       }
