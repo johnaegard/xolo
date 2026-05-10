@@ -15,7 +15,7 @@ distrib: xolo
 	cp assets/*.bin distrib
 
 run: distrib
-	cd distrib && $(X16) -debug -prg xolo.prg && cd -
+	cd distrib && $(X16) -dump V -debug -prg xolo.prg && cd -
 
 LAYER_DEMO_OBJS = build/layer-demo.o build/vera-util.o
 

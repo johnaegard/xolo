@@ -30,32 +30,35 @@ void maze_randomize(void) {
 void maze_init_sprites(void) {
   unsigned char row, col;
   unsigned int i;
+  unsigned char height = 46;
 
   // Shape 1: top row blue across 48px (24 bytes 0x66 + 8 bytes 0x00), rest transparent
   vera_set_addr(0x00000UL);
-  for (col = 0; col < 24; col++) VERA.data0 = 0x66;
+  for (col = 0; col < 23; col++) VERA.data0 = 0x66;
+  VERA.data0 = 0x00;
   for (col = 0; col < 8;  col++) VERA.data0 = 0x00;
   for (row = 1; row < 64; row++)
     for (col = 0; col < 32; col++) VERA.data0 = 0x00;
 
   // Shape 2: left pixel blue for rows 0-47, rest transparent
   vera_set_addr(0x00800UL);
-  for (row = 0; row < 48; row++) {
+  for (row = 0; row < height; row++) {
     VERA.data0 = 0x60;
     for (col = 1; col < 32; col++) VERA.data0 = 0x00;
   }
-  for (row = 48; row < 64; row++)
+  for (row = height; row < 64; row++)
     for (col = 0; col < 32; col++) VERA.data0 = 0x00;
 
   // Shape 3: top row blue across 48px, left pixel blue for rows 1-47, rest transparent
   vera_set_addr(0x01000UL);
-  for (col = 0; col < 24; col++) VERA.data0 = 0x66;
+  for (col = 0; col < 23; col++) VERA.data0 = 0x66;
+  VERA.data0 = 0x00;
   for (col = 0; col < 8;  col++) VERA.data0 = 0x00;
-  for (row = 1; row < 48; row++) {
+  for (row = 1; row < height; row++) {
     VERA.data0 = 0x60;
     for (col = 1; col < 32; col++) VERA.data0 = 0x00;
   }
-  for (row = 48; row < 64; row++)
+  for (row = height; row < 64; row++)
     for (col = 0; col < 32; col++) VERA.data0 = 0x00;
 
   // Clear all 128 sprite attribute entries
@@ -90,15 +93,17 @@ void maze_draw_px(unsigned int px, unsigned int py) {
       enc_sx = encode_pos((int)sc * CELL_PX - (int)sub_x);
       enc_sy = encode_pos((int)sr * CELL_PX - (int)sub_y);
 
-      if (val == 0) {
+      if (game_over) {
+      }
+      else if (val == 0) {
         VERA.data0 = 0x00;
         VERA.data0 = 0x00;
-        VERA.data0 = (unsigned char)(enc_sx & 0xFF);
-        VERA.data0 = (unsigned char)(enc_sx >> 8);
-        VERA.data0 = (unsigned char)(enc_sy & 0xFF);
-        VERA.data0 = (unsigned char)(enc_sy >> 8);
-        VERA.data0 = SPRITE_BYTE6_Z_DISABLED;
-        VERA.data0 = SPRITE_BYTE7_HEIGHT_64 | SPRITE_BYTE7_WIDTH_64;
+        VERA.data0 = 0x00;
+        VERA.data0 = 0x00;
+        VERA.data0 = 0x00;
+        VERA.data0 = 0x00;
+        VERA.data0 = 0x00;
+        VERA.data0 = 0x00;
       } else {
         VERA.data0 = shape_addr_byte0[val];
         VERA.data0 = SPRITE_BYTE1_4BPP;
@@ -106,7 +111,7 @@ void maze_draw_px(unsigned int px, unsigned int py) {
         VERA.data0 = (unsigned char)(enc_sx >> 8);
         VERA.data0 = (unsigned char)(enc_sy & 0xFF);
         VERA.data0 = (unsigned char)(enc_sy >> 8);
-        VERA.data0 = SPRITE_BYTE6_Z_ABOVE_BACKGROUND | SPRITE_BYTE6_COLLMASK_0;
+        VERA.data0 = SPRITE_BYTE6_Z_ABOVE_L2 | SPRITE_BYTE6_COLLMASK_0;
         VERA.data0 = SPRITE_BYTE7_HEIGHT_64 | SPRITE_BYTE7_WIDTH_64;
       }
     }
