@@ -33,7 +33,7 @@ void maze_init_sprites(void) {
   unsigned int i;
   unsigned char height = 46;
   unsigned char color2bit =0x11;
-  unsigned char color1bit =0x01;
+  unsigned char color1bit =0x10;
 
   // Shape 1: top row blue across 48px (24 bytes 0x66 + 8 bytes 0x00), rest transparent
   vera_set_addr(0x00000UL);
