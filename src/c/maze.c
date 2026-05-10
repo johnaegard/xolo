@@ -1,5 +1,6 @@
 #include <cx16.h>
 #include <stdlib.h>
+#include <stdbool.h>
 #include "vera-util.h"
 #include "maze.h"
 
@@ -83,10 +84,12 @@ void maze_draw_px(unsigned int px, unsigned int py) {
   unsigned char sub_y    = (unsigned char)(py % CELL_PX);
   unsigned char sc, sr, mr, mc, val;
   unsigned int enc_sx, enc_sy;
+  bool even_row = false;
 
   vera_set_addr(0x1FC00UL);
 
   for (sr = 0; sr <= VIEW_ROWS; sr++) {
+    even_row = (sr % 2 == 0);
     for (sc = 0; sc <= VIEW_COLS; sc++) {
       mr  = cell_row + sr;
       mc  = cell_col + sc;
@@ -112,7 +115,7 @@ void maze_draw_px(unsigned int px, unsigned int py) {
         VERA.data0 = (unsigned char)(enc_sx >> 8);
         VERA.data0 = (unsigned char)(enc_sy & 0xFF);
         VERA.data0 = (unsigned char)(enc_sy >> 8);
-        VERA.data0 = SPRITE_BYTE6_Z_ABOVE_BACKGROUND | SPRITE_BYTE6_COLLMASK_0;
+        VERA.data0 = SPRITE_BYTE6_Z_ABOVE_BACKGROUND | (even_row ? SPRITE_BYTE6_COLLMASK_3 : SPRITE_BYTE6_COLLMASK_2);
         VERA.data0 = SPRITE_BYTE7_HEIGHT_64 | SPRITE_BYTE7_WIDTH_64;
       }
     }

@@ -75,7 +75,7 @@ int main(void) {
       {
         if (collision_occurred) {
           unsigned char coll = VERA.irq_flags & 0xF0;
-          if (coll & 0b00010000) {
+          if ((coll & 0b10000000) || (coll & 0b01000000)) {  // collision with enemy sprite (group 3) or maze sprite (group 2)
             overlay_draw_collision(coll >> 4);
             game_over = 1;
             tank_destroy();
