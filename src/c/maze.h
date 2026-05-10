@@ -13,7 +13,6 @@
 
 // Cell values: 0=no walls, 1=top wall, 2=left wall, 3=top+left walls
 extern unsigned char maze[MAZE_ROWS][MAZE_COLS];
-extern unsigned char game_over;
 
 void maze_randomize(void);
 void maze_init_sprites(void);

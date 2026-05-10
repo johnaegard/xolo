@@ -4,6 +4,7 @@
 #include <6502.h>
 #include <stdbool.h>
 #include <stdio.h>
+#include <conio.h>
 #include "vera-util.h"
 #include "maze.h"
 #include "overlay.h"
@@ -26,15 +27,14 @@ unsigned int px, py;
 bool vsync=false;
 
 static unsigned char irqHandler(void) {
-  if (VERA.irq_flags & 0x04) {
-    VERA.irq_flags = 0x04;  // clear SPRCOL
-    collision_occurred = true;
-    game_over = 1;
-    return IRQ_HANDLED;
-  }
-  else if (VERA.irq_flags & 0x01) {
+  if (VERA.irq_flags & 0x01) {
     vsync = true;
     return IRQ_NOT_HANDLED;
+  }
+  else if (VERA.irq_flags & 0x04) {
+    VERA.irq_flags = 0x04;  // clear SPRCOL
+    collision_occurred = true;
+    return IRQ_HANDLED;
   }
   return IRQ_NOT_HANDLED;
 }
@@ -44,7 +44,7 @@ int main(void) {
 
   VERA.display.hscale = DC_HSCALE_320;
   VERA.display.vscale = DC_VSCALE_240;
-  VERA.display.video  = SPRITES_ENABLED | LAYER0_ENABLED | LAYER1_ENABLED | VGA_ENABLED;
+  VERA.display.video  = SPRITES_ENABLED | LAYER0_ENABLED | LAYER1_DISABLED | VGA_ENABLED;
   VERA.display.border = 0xFF;  // cyan (default palette index 3)
 
   // Enable sprite collision interrupt and register the handler.
@@ -65,6 +65,7 @@ int main(void) {
   overlay_draw_coords(tank_world_x, tank_world_y);
 
   joy_install(cx16_std_joy);
+  clrscr();
 
   while (1) {
     if (vsync) {
@@ -72,16 +73,17 @@ int main(void) {
       joy = joy_read(0);
 
       {
-        unsigned char coll = VERA.irq_flags & 0xF0;
         if (collision_occurred) {
-          overlay_draw_collision(coll >> 4);
-          game_over = 1;
-          tank_destroy();
-          explosion_trigger(116, 116);
-          printf("Collision detected! ISR collision bits: %02X\n", coll >> 4);
+          unsigned char coll = VERA.irq_flags & 0xF0;
+          if (coll & 0b00010000) {
+            overlay_draw_collision(coll >> 4);
+            game_over = 1;
+            tank_destroy();
+            explosion_trigger(116, 116);
+          }
           collision_occurred = false;
         }
-        // VERA.irq_flags &= 0x0F;  // clear collision-group bits for next frame
+        VERA.irq_flags &= 0x0F;  // clear collision-group bits for next frame
       }
 
       enemy_update();

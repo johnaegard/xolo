@@ -50,7 +50,7 @@ void explosion_trigger(unsigned int x, unsigned int y) {
   VERA.data0 = (unsigned char)(x >> 8);
   VERA.data0 = (unsigned char)(y & 0xFF);
   VERA.data0 = (unsigned char)(y >> 8);
-  VERA.data0 = SPRITE_BYTE6_Z_ABOVE_BACKGROUND;
+  VERA.data0 = SPRITE_BYTE6_Z_ABOVE_L1;
   VERA.data0 = SPRITE_BYTE7_HEIGHT_16 | SPRITE_BYTE7_WIDTH_16;
 }
 

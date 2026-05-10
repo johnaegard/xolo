@@ -47,7 +47,7 @@ void tank_init(void) {
   VERA.data0 = (unsigned char)(TANK_X >> 8);
   VERA.data0 = (unsigned char)(TANK_Y & 0xFF);
   VERA.data0 = (unsigned char)(TANK_Y >> 8);
-  VERA.data0 = SPRITE_BYTE6_Z_ABOVE_L2 | SPRITE_BYTE6_COLLMASK_1;
+  VERA.data0 = SPRITE_BYTE6_Z_ABOVE_BACKGROUND | SPRITE_BYTE6_COLLMASK_0;
   VERA.data0 = SPRITE_BYTE7_HEIGHT_8 | SPRITE_BYTE7_WIDTH_8;
 }
 
