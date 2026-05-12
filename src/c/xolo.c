@@ -59,10 +59,17 @@ int main(void) {
   enemy_init();
   explosion_init();
 
-  px = tank_world_x - 120;
-  py = tank_world_y - 120;
-  maze_draw_px(px, py);
-  overlay_draw_coords(tank_world_x, tank_world_y);
+  {
+    int tsx;
+    int tsy;
+    px = (enemy_world_x >= 120) ? enemy_world_x - 120 : 0;
+    py = (enemy_world_y >= 120) ? enemy_world_y - 120 : 0;
+    maze_draw_px(px, py);
+    overlay_draw_coords(tank_world_x, tank_world_y);
+    tsx = (int)tank_world_x - (int)enemy_world_x + 120;
+    tsy = (int)tank_world_y - (int)enemy_world_y + 120;
+    tank_set_screen_pos(tsx, tsy);
+  }
 
   joy_install(cx16_std_joy);
   clrscr();
@@ -83,7 +90,7 @@ int main(void) {
             unsigned char cell_row = (unsigned char)((tank_world_y +4) / CELL_PX);
             unsigned char near_wall = 0;
             // left edge of current cell → check current cell's left wall
-            if (sub_x <= 3 && (maze[cell_row][cell_col] & 2)) near_wall = 1;
+            if (sub_x <= 4 && (maze[cell_row][cell_col] & 2)) near_wall = 1;
             // right edge of current cell → check left wall of next column
             if (sub_x >= CELL_PX - 3 && cell_col + 1 < MAZE_COLS
                 && (maze[cell_row][cell_col + 1] & 2)) near_wall = 1;
@@ -93,13 +100,21 @@ int main(void) {
             if (sub_y >= CELL_PX - 3 && cell_row + 1 < MAZE_ROWS
                 && (maze[cell_row + 1][cell_col] & 1)) near_wall = 1;
             if (near_wall) {
+              int expl_x;
+              int expl_y;
+              unsigned int enc_ex;
+              unsigned int enc_ey;
               game_over = 1;
               tank_destroy();
-              explosion_trigger(116, 116);
+              expl_x = (int)tank_world_x - (int)enemy_world_x + 116;
+              expl_y = (int)tank_world_y - (int)enemy_world_y + 116;
+              enc_ex = (expl_x < 0) ? (unsigned int)(1024 + expl_x) : (unsigned int)expl_x;
+              enc_ey = (expl_y < 0) ? (unsigned int)(1024 + expl_y) : (unsigned int)expl_y;
+              explosion_trigger(enc_ex, enc_ey);
             }
           }
           collision_occurred = false;
-        } else {
+        } else if (!game_over) {
           overlay_draw_collision(0, COLOR_COLLISION_IDLE);
         }
         VERA.irq_flags &= 0x0F;  // clear collision-group bits for next frame
@@ -110,15 +125,21 @@ int main(void) {
       if (!game_over) {
         if (joy & JOY_LEFT_MASK)  tank_rotate_ccw();
         if (joy & JOY_RIGHT_MASK) tank_rotate_cw();
-        if (joy & JOY_UP_MASK) {
-          tank_move_forward();
-          px = tank_world_x - 120;
-          py = tank_world_y - 120;
-          if (px > MAX_PX) px = MAX_PX;
-          if (py > MAX_PY) py = MAX_PY;
-          maze_draw_px(px, py);
-          overlay_draw_coords(tank_world_x, tank_world_y);
-        }
+        if (joy & JOY_UP_MASK)   tank_move_forward();
+        if (joy & JOY_DOWN_MASK) tank_move_backward();
+        overlay_draw_coords(tank_world_x, tank_world_y);
+      }
+      {
+        int tsx;
+        int tsy;
+        px = (enemy_world_x >= 120) ? enemy_world_x - 120 : 0;
+        py = (enemy_world_y >= 120) ? enemy_world_y - 120 : 0;
+        if (px > MAX_PX) px = MAX_PX;
+        if (py > MAX_PY) py = MAX_PY;
+        maze_draw_px(px, py);
+        tsx = (int)tank_world_x - (int)enemy_world_x + 120;
+        tsy = (int)tank_world_y - (int)enemy_world_y + 120;
+        tank_set_screen_pos(tsx, tsy);
       }
       vsync = false;
     }

@@ -57,6 +57,12 @@ void tank_move_forward(void) {
   tank_world_y = (unsigned int)((int)tank_world_y + (int)move_dy[frame]);
 }
 
+void tank_move_backward(void) {
+  unsigned char frame = tank_angle >> 5;
+  tank_world_x = (unsigned int)((int)tank_world_x - (int)move_dx[frame]);
+  tank_world_y = (unsigned int)((int)tank_world_y - (int)move_dy[frame]);
+}
+
 void tank_rotate_cw(void) {
   tank_angle++;
   tank_update_addr();
@@ -70,4 +76,14 @@ void tank_rotate_ccw(void) {
 void tank_destroy(void) {
   vera_set_addr(0x1FC00UL + (unsigned long)TANK_SPRITE_INDEX * 8 + 6);
   VERA.data0 = SPRITE_BYTE6_Z_DISABLED;
+}
+
+void tank_set_screen_pos(int sx, int sy) {
+  unsigned int enc_x = (sx < 0) ? (unsigned int)(1024 + sx) : (unsigned int)sx;
+  unsigned int enc_y = (sy < 0) ? (unsigned int)(1024 + sy) : (unsigned int)sy;
+  vera_set_addr(0x1FC00UL + (unsigned long)TANK_SPRITE_INDEX * 8 + 2);
+  VERA.data0 = (unsigned char)(enc_x & 0xFF);
+  VERA.data0 = (unsigned char)(enc_x >> 8);
+  VERA.data0 = (unsigned char)(enc_y & 0xFF);
+  VERA.data0 = (unsigned char)(enc_y >> 8);
 }
